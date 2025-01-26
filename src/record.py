@@ -1,11 +1,13 @@
 """
 Author: Gabriel Hubert
 Date: 2025-01-26
+Due Date: 2025-01-26
+Course: CST8002 Section 040 - Programming Research Project
 Professor: Tyler DeLay
 Assignment: Practical Project 1
 Description: This file contains the Record class which is used to store the data from the csv file.
 """
-
+#The Record class is used to store the data from the columns in the csv file.
 class Record:
     def __init__(self, csduid, csd, period, indicator_summary_description, unit_of_measure, original_value):
         self._csduid = csduid
@@ -65,6 +67,7 @@ class Record:
     def original_value(self, value):
         self._original_value = value
 
+    # String representation of the Record object
     def __str__(self):
         return (f"Record(CSDUID={self._csduid}, CSD={self._csd}, Period={self._period}, "
                 f"IndicatorSummaryDescription={self._indicator_summary_description}, "
