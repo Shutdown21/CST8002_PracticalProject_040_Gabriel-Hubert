@@ -9,66 +9,65 @@ Description: This file contains the Record class which is used to store the data
 """
 #The Record class is used to store the data from the columns in the csv file.
 class Record:
-    def __init__(self, csduid, csd, period, indicator_summary_description, unit_of_measure, original_value):
-        self._csduid = csduid
-        self._csd = csd
-        self._period = period
-        self._indicator_summary_description = indicator_summary_description
-        self._unit_of_measure = unit_of_measure
-        self._original_value = original_value
+    def __init__(self, csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue):
+        self.csduid = csduid
+        self.csd = csd
+        self.period = period
+        self.indicatorSummaryDescription = indicatorSummaryDescription
+        self.unitOfMeasure = unitOfMeasure
+        self.originalValue = originalValue
 
     # Accessors
     @property
     def csduid(self):
-        return self._csduid
+        return self.csduid
 
     @property
     def csd(self):
-        return self._csd
+        return self.csd
 
     @property
     def period(self):
-        return self._period
+        return self.period
 
     @property
-    def indicator_summary_description(self):
-        return self._indicator_summary_description
+    def indicatorSummaryDescription(self):
+        return self.indicatorSummaryDescription
 
     @property
-    def unit_of_measure(self):
-        return self._unit_of_measure
+    def unitOfMeasure(self):
+        return self.unitOfMeasure
 
     @property
-    def original_value(self):
-        return self._original_value
+    def originalValue(self):
+        return self.originalValue
 
     # Mutators
     @csduid.setter
     def csduid(self, value):
-        self._csduid = value
+        self.csduid = value
 
     @csd.setter
     def csd(self, value):
-        self._csd = value
+        self.csd = value
 
     @period.setter
     def period(self, value):
-        self._period = value
+        self.period = value
 
-    @indicator_summary_description.setter
-    def indicator_summary_description(self, value):
-        self._indicator_summary_description = value
+    @indicatorSummaryDescription.setter
+    def indicatorSummaryDescription(self, value):
+        self.indicatorSummaryDescription = value
 
-    @unit_of_measure.setter
-    def unit_of_measure(self, value):
-        self._unit_of_measure = value
+    @unitOfMeasure.setter
+    def unitOfMeasure(self, value):
+        self.unitOfMeasure = value
 
-    @original_value.setter
-    def original_value(self, value):
-        self._original_value = value
+    @originalValue.setter
+    def originalValue(self, value):
+        self.originalValue = value
 
     # String representation of the Record object
     def __str__(self):
-        return (f"Record(CSDUID={self._csduid}, CSD={self._csd}, Period={self._period}, "
-                f"IndicatorSummaryDescription={self._indicator_summary_description}, "
-                f"UnitOfMeasure={self._unit_of_measure}, OriginalValue={self._original_value})")
+        return (f"Record(CSDUID={self.csduid}, CSD={self.csd}, Period={self.period}, IndicatorSummaryDescription={self.indicatorSummaryDescription}, UnitOfMeasure={self.unitOfMeasure}, OriginalValue={self.originalValue})")
+
