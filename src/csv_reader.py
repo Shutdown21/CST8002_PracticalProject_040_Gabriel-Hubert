@@ -10,6 +10,7 @@ Description: This program reads the first few records from a CSV file and displa
 import csv
 from record import Record # Import the Record class from record.py
 
+
 #Function to load records from a CSV file
 def loadRecords(file_path):
     records = []
@@ -38,7 +39,7 @@ def loadRecords(file_path):
 
 #Main function
 if __name__ == "__main__":
-    file_path = "C:\School\Programming Research\CST8002_PracticalProject_040_Gabriel-Hubert\src\dailyvehiclesdownload.csv"  #CSV file location
+    file_path = "src\dailyvehiclesdownload.csv"  #CSV file location
     records = loadRecords(file_path)
     print("Author: Gabriel Hubert")
     print("Records:")
