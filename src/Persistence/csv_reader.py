@@ -8,6 +8,7 @@ Assignment: Practical Project 1
 Description: This program reads the first few records from a CSV file and displays them in a tabular format.
 """
 import csv
+import uuid
 from Model.record import Record # Import the Record class from record.py
 
 
@@ -41,6 +42,31 @@ def loadRecords():
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     return records
+
+def save_data(records):
+    """Persists the records to a new CSV file with a unique name."""
+    # Generate a unique filename using UUID, placed in the src directory
+    unique_filename = f"src/records_{uuid.uuid4().hex}.csv"
+    
+    try:
+        with open(unique_filename, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            writer.writerow(["CSDUID", "CSD", "Period", "IndicatorSummaryDescription", "UnitOfMeasure", "OriginalValue"])
+            
+            for record in records:
+                writer.writerow([
+                    record.csduid,
+                    record.csd,
+                    record.period,
+                    record.indicatorSummaryDescription,
+                    record.unitOfMeasure,
+                    record.originalValue
+                ])
+
+        print(f"Data successfully saved to {unique_filename}")
+    
+    except Exception as e:
+        print(f"Error saving data: {e}")
 
 def printRecords(records):
     print("Author: Gabriel Hubert")

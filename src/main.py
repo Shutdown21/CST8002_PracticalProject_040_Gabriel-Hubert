@@ -1,5 +1,5 @@
 from Presentation.ui import userInterface
-from Persistence.csv_reader import printRecords, loadRecords
+from Persistence.csv_reader import printRecords, loadRecords, save_data
 
 def main():
     records = []
@@ -8,6 +8,10 @@ def main():
         if choice == "1":
             records = loadRecords()
             printRecords(records)
+        if choice == "2":
+            save_data(records)
+        if choice == "3":
+            break
         else:
             print("Invalid choice, please try again.")
 
