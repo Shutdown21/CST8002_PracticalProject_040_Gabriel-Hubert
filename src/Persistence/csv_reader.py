@@ -12,7 +12,8 @@ from Model.record import Record # Import the Record class from record.py
 
 
 # Function to load records from a CSV file
-def loadRecords(file_path):
+def loadRecords():
+    file_path = "src/dailyvehiclesdownload.csv"  # CSV file location
     records = []
     try:
         with open(file_path, mode='r', encoding='utf-8') as file:
@@ -41,10 +42,7 @@ def loadRecords(file_path):
         print(f"An unexpected error occurred: {e}")
     return records
 
-# Main function
-if __name__ == "__main__":
-    file_path = "src/dailyvehiclesdownload.csv"  # CSV file location
-    records = loadRecords(file_path)  # Load the records from the CSV file
+def printRecords(records):
     print("Author: Gabriel Hubert")
     print("Records:")
     print("CSDUID, CSD, Period, IndicatorSummaryDescription, UnitOfMeasure, OriginalValue")
