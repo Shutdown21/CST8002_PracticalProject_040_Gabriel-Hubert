@@ -1,10 +1,10 @@
 """
 Author: Gabriel Hubert
-Date: 2025-01-26
-Due Date: 2025-01-26
+Date: 2025-02-16
+Due Date: 2025-02-16
 Course: CST8002 Section 040 - Programming Research Project
 Professor: Tyler DeLay
-Assignment: Practical Project 1
+Assignment: Practical Project 2
 Description: This file contains the Record class which is used to store the data from the csv file.
 """
 #The Record class is used to store the data from the columns in the csv file.
