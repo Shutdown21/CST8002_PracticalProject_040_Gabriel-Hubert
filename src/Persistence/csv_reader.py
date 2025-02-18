@@ -10,6 +10,7 @@ Description: This program reads the first few records from a CSV file and displa
 import csv
 import uuid
 from Model.record import Record # Import the Record class from record.py
+from Presentation.ui import selectRow
 
 
 # Function to load records from a CSV file
@@ -41,6 +42,7 @@ def loadRecords():
         print(f"Error: Missing expected column in CSV file: {e}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
+    print(f"Loaded {len(records)} records from {file_path} successfully.")
     return records
 
 def save_data(records):
@@ -68,7 +70,7 @@ def save_data(records):
     except Exception as e:
         print(f"Error saving data: {e}")
 
-def printRecords(records):
+def printAllRecords(records):
     print("Author: Gabriel Hubert")
     print("Records:")
     print("CSDUID, CSD, Period, IndicatorSummaryDescription, UnitOfMeasure, OriginalValue")
@@ -76,3 +78,12 @@ def printRecords(records):
         if index > 0 and index % 10 == 0:  # Every 10 records
             print("\nProgram by Gabriel Hubert\n") 
         print(f"{record.csduid}, {record.csd}, {record.period}, {record.indicatorSummaryDescription}, {record.unitOfMeasure}, {record.originalValue}")
+
+def printSingleRecord(record):
+    print("Author: Gabriel Hubert")
+    try:
+        row = selectRow()
+        print(f"{record[row]}")
+    except KeyError:
+        print("Invalid row selection")
+    
