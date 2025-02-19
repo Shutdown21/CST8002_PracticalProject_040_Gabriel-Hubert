@@ -79,11 +79,13 @@ def printAllRecords(records):
             print("\nProgram by Gabriel Hubert\n") 
         print(f"{record.csduid}, {record.csd}, {record.period}, {record.indicatorSummaryDescription}, {record.unitOfMeasure}, {record.originalValue}")
 
-def printSingleRecord(record):
+def printSingleRecord(records):
     print("Author: Gabriel Hubert")
     try:
-        row = selectRow()
-        print(f"{record[row]}")
+        row = selectRow()-1
+        print(f"{records[row]}")
     except KeyError:
-        print("Invalid row selection")
+        print("Invalid row selection\n")
+    except IndexError:
+        print("Invalid row selection\n")
     

@@ -1,4 +1,4 @@
-from Presentation.ui import userInterface
+from Presentation.ui import userInterface, newRecord
 from Persistence.csv_reader import printAllRecords, loadRecords, save_data, printSingleRecord
 
 def main():
@@ -14,9 +14,11 @@ def main():
         elif choice == "4":
             printSingleRecord(records)
         elif choice == "5":
+            newRecord(records)
+        elif choice == "6":
             break
         else:
-            print("Invalid choice, please try again.")
+            print("Invalid choice, please try again.\n")
 
 
 if __name__ == "__main__":
