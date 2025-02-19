@@ -1,20 +1,15 @@
-"""
-Author: Gabriel Hubert
-Date: 2025-01-26
-Due Date: 2025-01-26
-Course: CST8002 Section 040 - Programming Research Project
-Professor: Tyler DeLay
-Assignment: Practical Project 1
-Description: This program reads the first few records from a CSV file and displays them in a tabular format.
-"""
 import csv
 import uuid
-from Model.record import Record # Import the Record class from record.py
+from Model.record import Record  # Import the Record class from record.py
 from Presentation.ui import selectRow
 
-
-# Function to load records from a CSV file
 def loadRecords():
+    """
+    Load records from a CSV file.
+
+    Returns:
+        list: A list of Record objects loaded from the CSV file.
+    """
     file_path = "src/dailyvehiclesdownload.csv"  # CSV file location
     records = []
     try:
@@ -46,7 +41,12 @@ def loadRecords():
     return records
 
 def save_data(records):
-    """Persists the records to a new CSV file with a unique name."""
+    """
+    Persist the records to a new CSV file with a unique name.
+
+    Args:
+        records (list): The list of records to be saved.
+    """
     # Generate a unique filename using UUID, placed in the src directory
     unique_filename = f"src/records_{uuid.uuid4().hex}.csv"
     
@@ -71,6 +71,12 @@ def save_data(records):
         print(f"Error saving data: {e}")
 
 def printAllRecords(records):
+    """
+    Print all records to the console.
+
+    Args:
+        records (list): The list of records to be printed.
+    """
     print("Author: Gabriel Hubert")
     print("Records:")
     print("CSDUID, CSD, Period, IndicatorSummaryDescription, UnitOfMeasure, OriginalValue")
@@ -80,12 +86,17 @@ def printAllRecords(records):
         print(f"{record.csduid}, {record.csd}, {record.period}, {record.indicatorSummaryDescription}, {record.unitOfMeasure}, {record.originalValue}")
 
 def printSingleRecord(records):
+    """
+    Print a single record to the console based on user selection.
+
+    Args:
+        records (list): The list of records to select from.
+    """
     print("Author: Gabriel Hubert")
     try:
-        row = selectRow()-1
+        row = selectRow() - 1
         print(f"{records[row]}")
     except KeyError:
         print("Invalid row selection\n")
     except IndexError:
         print("Invalid row selection\n")
-    

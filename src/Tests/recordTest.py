@@ -3,9 +3,14 @@ from unittest.mock import patch
 from Business.deleteRecord import deleteRecord
 
 class TestDeleteRecord(unittest.TestCase):
-    
+    """
+    Unit test case for the deleteRecord function.
+    """
     @patch("Business.deleteRecord.selectRow", return_value=2)  # Mock selectRow to always return 2
     def test_delete_record(self, mock_selectRow):
+        """
+        Test the deleteRecord function to ensure it correctly removes a record from the list.
+        """
         records = [
             {"id": 1, "name": "Record 1", "value": "Value 1"},
             {"id": 2, "name": "Record 2", "value": "Value 2"},

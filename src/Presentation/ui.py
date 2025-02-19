@@ -1,6 +1,12 @@
 from Business.createRecord import createRecord
 
 def userInterface():
+    """
+    Display the user interface menu and get the user's choice.
+
+    Returns:
+        str: The user's choice as a string.
+    """
     print("Please select an option:")
     print("1. Load CSV")
     print("2. Save CSV")
@@ -14,6 +20,12 @@ def userInterface():
     return choice
                 
 def selectRow():
+    """
+    Prompt the user to select a row by entering a number.
+
+    Returns:
+        int: The selected row number.
+    """
     while True:
         try:
             row = int(input("Please select a row: "))
@@ -22,6 +34,12 @@ def selectRow():
              print("Invalid input. Please enter a valid number.\n")
 
 def newRecord(records):
+    """
+    Prompt the user to enter details for a new record and add it to the records list.
+
+    Args:
+        records (list): The list of records to which the new record will be added.
+    """
     csduid = input("Enter the CSDUID: ")
     csd = input("Enter the CSD: ")
     period = input("Enter the Period: ")
@@ -32,6 +50,15 @@ def newRecord(records):
     print("Record added successfully.")
 
 def getUpdateRecordInput(record):
+    """
+    Prompt the user to enter new values for the fields of a record. Leave blank to keep the current value.
+
+    Args:
+        record (dict): The record to be updated.
+
+    Returns:
+        tuple: The updated values for the record fields.
+    """
     print(f"Editing Record: {record}")
     print("Leave blank to keep the current value.")
     new_csduid = input(f"New CSDUID (Current: {record.csduid}): ") or record.csduid

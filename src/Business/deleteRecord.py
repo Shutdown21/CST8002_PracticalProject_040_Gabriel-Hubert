@@ -1,6 +1,12 @@
 from Presentation.ui import selectRow
 
 def deleteRecord(records):
+    """
+    Delete a record from the records list. Prompts the user to select a row to delete.
+
+    Args:
+        records (list): The list of records from which a record will be deleted.
+    """
     print("Author: Gabriel Hubert")
     try:
         row = selectRow() - 1

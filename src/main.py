@@ -4,6 +4,10 @@ from Business.updateRecord import updateRecord
 from Business.deleteRecord import deleteRecord
 
 def main():
+    """
+    Main function to run the program. It provides a user interface to interact with records.
+    The user can load, save, print, add, update, delete records, or exit the program.
+    """
     records = []
     while True:
         choice = userInterface()
