@@ -7,8 +7,9 @@ def userInterface():
     print("3. Select all records")
     print("4. Select a single record")
     print("5. Add a new record") 
-    print("6. Update a record")       
-    print("7. Exit")
+    print("6. Update a record")    
+    print("7. Delete a record")
+    print("8. Exit")   
     choice = input("Enter your choice: ")
     return choice
                 
