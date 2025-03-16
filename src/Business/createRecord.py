@@ -1,6 +1,9 @@
 from Model.record import Record
+import sqlite3
 
-def createRecord(csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue, records):
+DB_FILE = "database.db"
+
+def createRecord(csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue, records, use_database=False):
     """
     Create a new record and add it to the records list.
 
@@ -16,9 +19,21 @@ def createRecord(csduid, csd, period, indicatorSummaryDescription, unitOfMeasure
     Returns:
         list: The updated list of records with the new record added.
     """
-    new_record = Record(
-        csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue
-    )
-    records.append(new_record)
-    return records
+    if use_database:
+        connection = sqlite3.connect(DB_FILE)
+        cursor = connection.cursor()
 
+        cursor.execute("""
+            INSERT INTO records (csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue))
+
+        connection.commit()
+        connection.close()
+        print("Record successfully added to the database.")
+
+    else:
+        new_record = Record(csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue)
+        records.append(new_record)
+        print("Record successfully added to the in-memory list.")
+        return records
