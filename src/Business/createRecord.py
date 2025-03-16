@@ -25,8 +25,7 @@ def createRecord(csduid, csd, period, indicatorSummaryDescription, unitOfMeasure
 
         cursor.execute("""
             INSERT INTO records (csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue))
+            VALUES (?, ?, ?, ?, ?, ?) """, (csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue))
 
         connection.commit()
         connection.close()
