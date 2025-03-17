@@ -18,7 +18,7 @@ class TestDeleteRecord(unittest.TestCase):
         ]
 
         deleteRecord(records)
-
+        print("Program by Gabriel Hubert")
         self.assertEqual(len(records), 2)  # Ensure one record was removed
         self.assertNotIn({"id": 2, "name": "Record 2", "value": "Value 2"}, records)  # Ensure record with ID 2 is gone
 

@@ -1,83 +1,50 @@
 import csv
 import uuid
-from Model.record import Record  # Import the Record class from record.py
 from Presentation.ui import selectRow
 import sqlite3
 
 DB_FILE = "database.db"
 file_path = "src/dailyvehiclesdownload.csv"  # CSV file location
 
-def loadRecords(use_database=True):
+def loadRecords():
     """
     Load records from a CSV file.
 
-    Returns:
-        list: A list of Record objects loaded from the CSV file.
+    Returns: A list of Record objects loaded from the CSV file.
     """
-    records = []
     try:
+        # Connect to the database
+        connection = sqlite3.connect(DB_FILE)
+        cursor = connection.cursor()
+
+        # Open the CSV file
         with open(file_path, mode='r', encoding='utf-8') as file:
             csv_reader = csv.DictReader(file)
 
-            # Connect to database if using database storage
-            connection = None
-            cursor = None
-            if use_database:
-                connection = sqlite3.connect(DB_FILE)
-                cursor = connection.cursor()
-
-                # Create table if not exists
-                cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS records (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        csduid TEXT,
-                        csd TEXT,
-                        period TEXT,
-                        indicatorSummaryDescription TEXT,
-                        unitOfMeasure TEXT,
-                        originalValue TEXT
-                    )
-                """)
-
             for index, row in enumerate(csv_reader):
-                if index >= 100:  # Stop reading after 100 records
+                if index >= 100:  # Stop after 100 records
                     break
 
-                if use_database:
-                    # Insert into database
-                    cursor.execute("""
-                        INSERT INTO records (csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue) 
-                        VALUES (?, ?, ?, ?, ?, ?)
-                    """, (row['CSDUID'], row['CSD'], row['Period'], row['IndicatorSummaryDescription'], row['UnitOfMeasure'], row['OriginalValue']))
-                else:
-                    # Create Record object and store in-memory
-                    record = Record(
-                        csduid=row['CSDUID'],
-                        csd=row['CSD'],
-                        period=row['Period'],
-                        indicatorSummaryDescription=row['IndicatorSummaryDescription'],
-                        unitOfMeasure=row['UnitOfMeasure'],
-                        originalValue=row['OriginalValue']
-                    )
-                    records.append(record)
+                # Insert each row into the database
+                cursor.execute("""
+                    INSERT INTO records (csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue) 
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """, (row['CSDUID'], row['CSD'], row['Period'], row['IndicatorSummaryDescription'], row['UnitOfMeasure'], row['OriginalValue']))
 
-            if use_database:
-                connection.commit()
-                connection.close()
-                print(f"Loaded {index + 1} records into the database successfully.")
-            else:
-                print(f"Loaded {len(records)} records from {file_path} successfully.")
+        # Commit and close the connection
+        connection.commit()
+        connection.close()
+
+        print(f"Successfully loaded records from {file_path} into the database.")
 
     except FileNotFoundError:
         print(f"Error: The file '{file_path}' was not found.")
-    except KeyError as e:
-        print(f"Error: Missing expected column in CSV file: {e}")
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
-    return records if not use_database else None
-
-def save_data(records=None, use_database=True):
+def save_data():
     """
     Persist the records to a new CSV file with a unique name.
 
@@ -88,38 +55,42 @@ def save_data(records=None, use_database=True):
     unique_filename = f"src/records_{uuid.uuid4().hex}.csv"
     
     try:
+        # Connect to the database
+        connection = sqlite3.connect(DB_FILE)
+        cursor = connection.cursor()
+
+        # Retrieve all records from the database
+        cursor.execute("SELECT csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue FROM records")
+        db_records = cursor.fetchall()
+
+        # Check if there are records
+        if not db_records:
+            print("No records found in the database to save.")
+            connection.close()
+            return
+
+        # Open the CSV file for writing
         with open(unique_filename, mode='w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
+
+            # Write the header row
             writer.writerow(["CSDUID", "CSD", "Period", "IndicatorSummaryDescription", "UnitOfMeasure", "OriginalValue"])
 
-            if use_database:
-                connection = sqlite3.connect(DB_FILE)
-                cursor = connection.cursor()
+            # Write all records to the CSV
+            for record in db_records:
+                writer.writerow(record)
 
-                cursor.execute("SELECT csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue FROM records")
-                db_records = cursor.fetchall()
-                
-                for record in db_records:
-                    writer.writerow(record)
-
-                connection.close()
-            else:
-                for record in records:
-                    writer.writerow([
-                        record.csduid,
-                        record.csd,
-                        record.period,
-                        record.indicatorSummaryDescription,
-                        record.unitOfMeasure,
-                        record.originalValue
-                    ])
+        # Close the database connection
+        connection.close()
 
         print(f"Data successfully saved to {unique_filename}")
-    
-    except Exception as e:
-        print(f"Error saving data: {e}")
 
-def printAllRecords(records, use_database=False):
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+def printAllRecords():
     """
     Print all records to the console.
 
@@ -129,29 +100,42 @@ def printAllRecords(records, use_database=False):
     print("Author: Gabriel Hubert")
     print("Records:")
     print("CSDUID, CSD, Period, IndicatorSummaryDescription, UnitOfMeasure, OriginalValue")
-    if use_database:
+    try:
+        # Connect to the database
         connection = sqlite3.connect(DB_FILE)
         cursor = connection.cursor()
-        
+
+        # Retrieve all records from the database
         cursor.execute("SELECT csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue FROM records")
         db_records = cursor.fetchall()
 
+        # Check if there are any records
         if not db_records:
             print("No records found in the database.\n")
-        else:
-            for index, record in enumerate(db_records):
-                if index > 0 and index % 10 == 0:  # Every 10 records
-                    print("\nProgram by Gabriel Hubert\n") 
-                print(", ".join(map(str, record)))
+            connection.close()
+            return
 
+        # Print the records
+        print("Author: Gabriel Hubert")
+        print("Records:")
+        print("CSDUID, CSD, Period, IndicatorSummaryDescription, UnitOfMeasure, OriginalValue")
+
+        for index, record in enumerate(db_records):
+            # Every 10 records, print the message
+            if index > 0 and index % 10 == 0:
+                print("\nProgram by Gabriel Hubert\n")
+
+            print(", ".join(map(str, record)))
+
+        # Close the database connection
         connection.close()
-    else:
-        for index, record in enumerate(records):
-            if index > 0 and index % 10 == 0:  # Every 10 records
-                print("\nProgram by Gabriel Hubert\n") 
-            print(f"{record.csduid}, {record.csd}, {record.period}, {record.indicatorSummaryDescription}, {record.unitOfMeasure}, {record.originalValue}")
 
-def printSingleRecord(records, use_database=False):
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+def printSingleRecord():
     """
     Print a single record to the console based on user selection.
 
@@ -160,27 +144,35 @@ def printSingleRecord(records, use_database=False):
     """
     print("Author: Gabriel Hubert")
     try:
-        row = selectRow() - 1  # Convert to zero-based index
+        # Get the user input for the row (1-based index from selectRow)
+        row = selectRow() - 1  # Convert to zero-based index for SQLite
 
-        if use_database:
-            connection = sqlite3.connect(DB_FILE)
-            cursor = connection.cursor()
+        # Connect to the database
+        connection = sqlite3.connect(DB_FILE)
+        cursor = connection.cursor()
 
-            # Fetch a single record using OFFSET
-            cursor.execute("SELECT csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue FROM records LIMIT 1 OFFSET ?", (row,))
-            record = cursor.fetchone()
+        # Fetch the record from the database based on the row selected
+        cursor.execute("""
+            SELECT csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue
+            FROM records
+            LIMIT 1 OFFSET ?
+        """, (row,))
 
-            if record:
-                print(", ".join(map(str, record)))
-            else:
-                print("Invalid row selection: No record found at that position.\n")
+        record = cursor.fetchone()
 
-            connection.close()
+        # If record exists, print it, otherwise print an error message
+        if record:
+            print(f"Author: Gabriel Hubert\n")
+            print(", ".join(map(str, record)))
         else:
-            if 0 <= row < len(records):
-                print(f"{records[row]}")
-            else:
-                print("Invalid row selection: Out of range\n")
+            print("Invalid row selection: No record found at that position.\n")
+
+        # Close the database connection
+        connection.close()
 
     except ValueError:
         print("Invalid input. Please enter a valid number.\n")
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")

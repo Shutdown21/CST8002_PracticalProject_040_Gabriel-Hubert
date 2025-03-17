@@ -2,29 +2,30 @@ from Presentation.ui import userInterface, newRecord
 from Persistence.csv_reader import printAllRecords, loadRecords, save_data, printSingleRecord
 from Business.updateRecord import updateRecord
 from Business.deleteRecord import deleteRecord
+from Persistence.database import create_database
 
 def main():
     """
     Main function to run the program. It provides a user interface to interact with records.
     The user can load, save, print, add, update, delete records, or exit the program.
     """
-    records = []
+    create_database()
     while True:
         choice = userInterface()
         if choice == "1":
-            records = loadRecords()
+            loadRecords()
         elif choice == "2":
-            save_data(records)
+            save_data()
         elif choice == "3":
-            printAllRecords(records)
+            printAllRecords()
         elif choice == "4":
-            printSingleRecord(records)
+            printSingleRecord()
         elif choice == "5":
-            newRecord(records)
+            newRecord()
         elif choice == "6":
-            updateRecord(records)
+            updateRecord()
         elif choice == "7":
-            deleteRecord(records)
+            deleteRecord()
         elif choice == "8":
             break
         else:
