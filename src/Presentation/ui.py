@@ -72,3 +72,21 @@ def getUpdateRecordInput(current_values):
     new_original_value = input(f"New Original Value (Current: {current_values[5]}): ") or current_values[5]
     
     return new_csduid, new_csd, new_period, new_indicator, new_unit, new_original_value
+
+def searchRecordsInput():
+    """
+    Prompt the user to enter a row number for searching.
+
+    Returns:
+        int: The row number entered by the user.
+    """
+    print("Enter search criteria for each field. Leave blank to skip a field.")
+    return {
+        "csduid": input("CSDUID: ").strip(),
+        "csd": input("CSD: ").strip(),
+        "period": input("Period: ").strip(),
+        "indicatorSummaryDescription": input("Indicator Summary Description: ").strip(),
+        "unitOfMeasure": input("Unit of Measure: ").strip(),
+        "originalValue_min": input("Original Value (Min): ").strip(),
+        "originalValue_max": input("Original Value (Max): ").strip(),
+    }

@@ -1,6 +1,6 @@
 import csv
 import uuid
-from Presentation.ui import selectRow
+from Presentation.ui import searchRecordsInput, selectRow
 import sqlite3
 
 DB_FILE = "database.db"
@@ -184,40 +184,33 @@ def searchRecords():
     Returns:
         None
     """
-    print("Enter search criteria for each field. Leave blank to skip a field.")
-    csduid = input("CSDUID: ").strip()
-    csd = input("CSD: ").strip()
-    period = input("Period: ").strip()
-    indicatorSummaryDescription = input("Indicator Summary Description: ").strip()
-    unitOfMeasure = input("Unit of Measure: ").strip()
-    originalValue_min = input("Original Value (Min): ").strip()
-    originalValue_max = input("Original Value (Max): ").strip()
+    searchResults = searchRecordsInput()
 
     # Build the SQL query dynamically based on user input
     query = "SELECT csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue FROM records WHERE 1=1"
     params = []
 
-    if csduid:
+    if searchResults["csduid"]:
         query += " AND csduid = ?"
-        params.append(csduid)
-    if csd:
+        params.append(searchResults["csduid"])
+    if searchResults["csd"]:
         query += " AND csd = ?"
-        params.append(csd)
-    if period:
+        params.append(searchResults["csd"])
+    if searchResults["period"]:
         query += " AND period = ?"
-        params.append(period)
-    if indicatorSummaryDescription:
+        params.append(searchResults["period"])
+    if searchResults["indicatorSummaryDescription"]:
         query += " AND indicatorSummaryDescription = ?"
-        params.append(indicatorSummaryDescription)
-    if unitOfMeasure:
+        params.append(searchResults["indicatorSummaryDescription"])
+    if searchResults["unitOfMeasure"]:
         query += " AND unitOfMeasure = ?"
-        params.append(unitOfMeasure)
-    if originalValue_min:
-        query += " AND originalValue >= ?"
-        params.append(originalValue_min)
-    if originalValue_max:
-        query += " AND originalValue <= ?"
-        params.append(originalValue_max)
+        params.append(searchResults["unitOfMeasure"])
+    if searchResults["originalValue_min"]:
+        query += " AND CAST(originalValue AS REAL) >= ?"
+        params.append(searchResults["originalValue_min"])
+    if searchResults["originalValue_max"]:
+        query += " AND CAST(originalValue AS REAL) <= ?"
+        params.append(searchResults["originalValue_max"])
 
     try:
         # Connect to the database
