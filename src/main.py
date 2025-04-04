@@ -1,5 +1,5 @@
 from Presentation.ui import userInterface, newRecord
-from Persistence.csv_reader import printAllRecords, loadRecords, save_data, printSingleRecord
+from Persistence.csv_reader import printAllRecords, loadRecords, save_data, printSingleRecord, searchRecords
 from Business.updateRecord import updateRecord
 from Business.deleteRecord import deleteRecord
 from Persistence.database import create_database
@@ -27,6 +27,8 @@ def main():
         elif choice == "7":
             deleteRecord()
         elif choice == "8":
+            searchRecords()
+        elif choice == "9":
             break
         else:
             print("Invalid choice, please try again.\n")

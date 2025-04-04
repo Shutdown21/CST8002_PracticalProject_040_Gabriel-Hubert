@@ -176,3 +176,67 @@ def printSingleRecord():
         print(f"Database error: {e}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
+
+def searchRecords():
+    """
+    Search or filter records in the SQLite database based on multiple columns.
+
+    Returns:
+        None
+    """
+    print("Enter search criteria for each field. Leave blank to skip a field.")
+    csduid = input("CSDUID: ").strip()
+    csd = input("CSD: ").strip()
+    period = input("Period: ").strip()
+    indicatorSummaryDescription = input("Indicator Summary Description: ").strip()
+    unitOfMeasure = input("Unit of Measure: ").strip()
+    originalValue = input("Original Value: ").strip()
+
+    # Build the SQL query dynamically based on user input
+    query = "SELECT csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue FROM records WHERE 1=1"
+    params = []
+
+    if csduid:
+        query += " AND csduid = ?"
+        params.append(csduid)
+    if csd:
+        query += " AND csd = ?"
+        params.append(csd)
+    if period:
+        query += " AND period = ?"
+        params.append(period)
+    if indicatorSummaryDescription:
+        query += " AND indicatorSummaryDescription = ?"
+        params.append(indicatorSummaryDescription)
+    if unitOfMeasure:
+        query += " AND unitOfMeasure = ?"
+        params.append(unitOfMeasure)
+    if originalValue:
+        query += " AND originalValue = ?"
+        params.append(originalValue)
+
+    try:
+        # Connect to the database
+        connection = sqlite3.connect(DB_FILE)
+        cursor = connection.cursor()
+
+        # Execute the query with the parameters
+        cursor.execute(query, params)
+        results = cursor.fetchall()
+
+        # Display the results
+        if results:
+            print("\nMatching Records:")
+            print("CSDUID, CSD, Period, Indicator Summary Description, Unit of Measure, Original Value")
+            for record in results:
+                print(", ".join(map(str, record)))
+        else:
+            print("\nNo matching records found.")
+
+        # Close the database connection
+        connection.close()
+
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")

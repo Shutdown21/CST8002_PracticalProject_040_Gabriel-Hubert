@@ -15,7 +15,8 @@ def userInterface():
     print("5. Add a new record") 
     print("6. Update a record")    
     print("7. Delete a record")
-    print("8. Exit")   
+    print("8. Search records")
+    print("9. Exit")   
     choice = input("Enter your choice: ")
     return choice
                 

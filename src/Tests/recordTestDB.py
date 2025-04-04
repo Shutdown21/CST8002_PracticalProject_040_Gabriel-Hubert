@@ -17,7 +17,7 @@ class TestDeleteRecord(unittest.TestCase):
         connection = sqlite3.connect("database.db")  # Use the actual database file
         cursor = connection.cursor()
 
-        # Create the records table in the mock database (if it doesn't exist)
+        # Create the records table in the mock database
         create_database()
 
         # Insert mock data into the database
