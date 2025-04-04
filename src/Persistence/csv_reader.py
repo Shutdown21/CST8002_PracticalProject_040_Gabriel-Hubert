@@ -190,7 +190,8 @@ def searchRecords():
     period = input("Period: ").strip()
     indicatorSummaryDescription = input("Indicator Summary Description: ").strip()
     unitOfMeasure = input("Unit of Measure: ").strip()
-    originalValue = input("Original Value: ").strip()
+    originalValue_min = input("Original Value (Min): ").strip()
+    originalValue_max = input("Original Value (Max): ").strip()
 
     # Build the SQL query dynamically based on user input
     query = "SELECT csduid, csd, period, indicatorSummaryDescription, unitOfMeasure, originalValue FROM records WHERE 1=1"
@@ -211,9 +212,12 @@ def searchRecords():
     if unitOfMeasure:
         query += " AND unitOfMeasure = ?"
         params.append(unitOfMeasure)
-    if originalValue:
-        query += " AND originalValue = ?"
-        params.append(originalValue)
+    if originalValue_min:
+        query += " AND originalValue >= ?"
+        params.append(originalValue_min)
+    if originalValue_max:
+        query += " AND originalValue <= ?"
+        params.append(originalValue_max)
 
     try:
         # Connect to the database
